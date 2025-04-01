@@ -4,6 +4,7 @@
         "module": {
             "name": "rewards_agent",
             "description": "An agent that rewards another agent for completing a task",
+            "parameters": "{func_input_data: Dict[str, Any], quality_threshold: float = 7, base_reward: float = 10}",
             "module_type": "agent",
             "module_version": "v0.1",
             "module_entrypoint": "run.py",
