@@ -1,5 +1,5 @@
 from langchain_experimental.text_splitter import SemanticChunker
-from langchain_openai import OpenAIEmbeddings
+from rewards_agent.utils.ollama_embedder import OllamaNomicEmbedder
 from rewards_agent.utils.quality_assessor import QualityAssessor
 from rewards_agent.schemas import ContentSchema
 from typing import List, Dict
@@ -14,7 +14,7 @@ class DocumentProcessor:
     def __init__(
             self,
             module_run: Dict,
-            embedding_model: OpenAIEmbeddings,
+            embedding_model: OllamaNomicEmbedder,
             breakpoint_threshold: float = 95,
         ):
         self.chunker = SemanticChunker(

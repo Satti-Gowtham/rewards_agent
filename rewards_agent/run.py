@@ -6,7 +6,7 @@ from naptha_sdk.utils import get_logger
 from rewards_agent.schemas import InputSchema, QualityAssessmentSchema
 from rewards_agent.utils.reward_calculator import RewardCalculator
 from rewards_agent.utils.document_processor import DocumentProcessor
-from langchain_openai import OpenAIEmbeddings
+from rewards_agent.utils.ollama_embedder import OllamaNomicEmbedder
 
 load_dotenv()
 logger = get_logger(__name__)
@@ -18,7 +18,7 @@ class RewardsAgent:
             min_quality_threshold=module_run.inputs.quality_threshold, 
             base_reward=module_run.inputs.base_reward
         )
-        self.document_processor = DocumentProcessor(module_run, OpenAIEmbeddings())
+        self.document_processor = DocumentProcessor(module_run, OllamaNomicEmbedder(base_url="http://ollama:11434", model_name="nomic-embed"))
 
     async def assess_and_reward(self, input_data: Dict) -> Dict:
         """Assess content quality and provide rewards if merited."""
@@ -27,7 +27,7 @@ class RewardsAgent:
         if "file_path" in input_data:
             quality_assessment = await self.document_processor.process_document(file_path=input_data["file_path"], agent_id=input_data["agent_id"])
         elif "text" in input_data:
-            quality_assessment = await self.document_processor.process_document(text=input_data["text"], agent_id=input_data["agent_id"])
+            quality_assessment = await self.document_processor.process_document(file_path=None, text=input_data["text"], agent_id=input_data["agent_id"])
         else:
             raise ValueError("No file path or text provided")
 
